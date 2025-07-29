@@ -2,6 +2,7 @@ import { useEffect, useState, ChangeEvent, KeyboardEvent, MouseEvent } from "rea
 import { SearchInput } from "../shared/SearchInput";
 import { Table } from "../shared/Table";
 import { Loading } from "../shared/Loading";
+import { EmptyState } from "../shared/EmptyState";
 import { Advocate } from "@/app/types/advocate-types";
 
 const COLUMN_NAMES = ['First Name', 'Last Name', 'City', 'Degree', 'Specialties', 'Years of Experience', 'Phone Number']
@@ -61,7 +62,7 @@ export const Advocates = () => {
       <div style={{ marginBottom: '20px' }}>
         <SearchInput onSearchClick={onSearchClick} onInputChange={onChange} onResetClick={onResetClick} inputLabel="Search for" value={searchStr} onEnter={onEnter} inputDisabled={advocates === undefined} resetDisabled={searchStr === "" && !showFilteredResults} searchBtnDisabled={searchStr === ""} />
       </div>
-      {advocates === undefined || (showFilteredResults && filteredAdvocates === undefined) ? <Loading /> : <Table columnNames={COLUMN_NAMES} tableData={showFilteredResults ? filteredAdvocates as Advocate[] : advocates as Advocate[]} />}
+      {advocates === undefined ? <Loading /> : (showFilteredResults && filteredAdvocates && filteredAdvocates.length < 1) ? <EmptyState /> : <Table columnNames={COLUMN_NAMES} tableData={showFilteredResults ? filteredAdvocates as Advocate[] : advocates as Advocate[]} />}
     </div>
   )
 }
