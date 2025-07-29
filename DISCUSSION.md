@@ -1,5 +1,7 @@
 ## TO DO
 
+** Original approach was to try to get as much done as possible using basics given the time limit. With more time I would have addressed the following:
+
 ### Using `Suspense` and fallback
   - Use in place of undefined check and `useEffect`/`useState` for setting table data
   - Break up `Advocates` into interactive component and async data fetching hook
