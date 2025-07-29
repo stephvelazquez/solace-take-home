@@ -37,7 +37,7 @@ export const Advocates = () => {
     const lowerCaseStr = searchStr.toLowerCase()
 
     const filteredAdvocateArr = advocates?.filter(advocate => {
-      const filteredSpecialty = advocate.specialties.map(spec => spec.toLowerCase()).filter(item => item.includes(lowerCaseStr))
+      const filteredSpecialty = advocate.specialties.filter(item => item.toLowerCase().includes(lowerCaseStr))
 
       return filteredSpecialty.length > 0 ||
         advocate.firstName.toLowerCase().includes(lowerCaseStr) ||
