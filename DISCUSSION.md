@@ -36,6 +36,11 @@ Clean up redundant filtering logic on data
 Switch out inline styling and custom components for Tailwind versions (NOTE: I *wanted to show knowledge of CSS + HTML, along with quick personal design decisions)
 
 
+### Loading + Empty State components
+Change `Table` component to display skeleton in the table body when loading, and a row with "No matches found" message when search returns nothing
+  - Replace current components that render outside the table
+
+
 ### Additional UI features
 Add filtering in addition to search for common categories (e.g. degrees, specialties)
 
