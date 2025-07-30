@@ -6,6 +6,15 @@ interface PaginationProps {
   currPage: number
 }
 
+const btnStyle = {
+  margin: '5px',
+  border: 'solid',
+  borderRadius: '5px',
+  padding: '0px 5px 0px 5px',
+  width: '2rem',
+  background: '#d3d3d3'
+}
+
 export const Pagination = ({ totalPages, onClick, currPage }: PaginationProps) => {
   const [pgOneBtnDisabled, setPgOneBtnDisabled] = useState(false);
   const [lastPgBtnDisabled, setLastPgBtnDisabled] = useState(false);
@@ -33,17 +42,17 @@ export const Pagination = ({ totalPages, onClick, currPage }: PaginationProps) =
 
   return (
     <div style={{display: 'flex', justifyContent: 'space-between', flexDirection: 'row', alignItems: 'center', marginTop: '12px'}} >
-      <button value="toFirst" disabled={pgOneBtnDisabled} onClick={onClick}>
+      <button style={btnStyle} value="toFirst" disabled={pgOneBtnDisabled} onClick={onClick}>
         {"<<"}
       </button>
-      <button value="previous" onClick={onClick} disabled={prevBtnDisabled}>
+      <button style={btnStyle} value="previous" onClick={onClick} disabled={prevBtnDisabled}>
         {"<"}
       </button>
-      <p className="footer-text">{`Page ${currPage} of ${totalPages}`}</p>
-      <button value="next" onClick={onClick} disabled={nextBtnDisabled}>
+      <p style={{fontSize: '14px', margin: '0px 5px 0px 5px'}}>{`Page ${currPage} of ${totalPages}`}</p>
+      <button style={btnStyle} value="next" onClick={onClick} disabled={nextBtnDisabled}>
         {">"}
       </button>
-      <button value="toLast" disabled={lastPgBtnDisabled} onClick={onClick}>
+      <button style={btnStyle} value="toLast" disabled={lastPgBtnDisabled} onClick={onClick}>
         {">>"}
       </button>
     </div>

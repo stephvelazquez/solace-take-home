@@ -19,7 +19,7 @@ export const Advocates = () => {
   const [currPage, setCurrPage] = useState(1);
   const [totalPages, setTotalPages] = useState(1);
   const [itemsPerPg, setItemsPerPg] = useState("All");
-  const [numAdvocates, setNumAdvocates] = useState<number>(0)
+  const [numAdvocates, setNumAdvocates] = useState<number>(0) // TODO: Refactor API to send this information as part of response
 
   useEffect(() => {
     fetch("/api/advocates").then((response) => {
@@ -85,8 +85,8 @@ export const Advocates = () => {
 
   return (
     <div>
-      <h1 style={{ fontSize: '50px',  fontWeight: '600', marginBottom: '30px'}}>Solace Advocates</h1>
-      <div style={{ marginBottom: '20px' }}>
+      <h1 style={{ fontSize: '50px',  fontWeight: '600', marginBottom: '3rem'}}>Solace Advocates</h1>
+      <div style={{ marginBottom: '2rem' }}>
         <SearchInput onSearchClick={onSearchClick} onInputChange={onChange} onResetClick={onResetClick} inputLabel="Search for" value={searchStr} onEnter={onEnter} inputDisabled={advocates === undefined} resetDisabled={searchStr === "" && !showFilteredResults} searchBtnDisabled={searchStr === ""} />
       </div>
       <div>
@@ -100,7 +100,8 @@ export const Advocates = () => {
             />
         }
       </div>
-      <div>
+      {/* Extract common styles into shared object */}
+      <div style={{display: 'flex', justifyContent: 'space-between', flexDirection: 'row', alignItems: 'center', marginTop: '3rem'}}>
         <ItemPerPgSelect onChange={onSelectChange} options={OPTIONS} disabled={advocates === undefined} />
         <Pagination
           totalPages={totalPages}
