@@ -7,7 +7,7 @@ interface TableProps {
 }
 
 export const Table = ({columnNames, tableData}: TableProps) => (
-  <table>
+  <table style={{width: '100%', height: '100%'}}>
         <thead style={{borderBottom: '2px solid'}}>
           {/* 
             <th> cannot be direct child of <thead> -- need to wrap in <tr>
