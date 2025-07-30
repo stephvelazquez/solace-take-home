@@ -40,6 +40,22 @@ Clean up redundant filtering logic on data
 ### Styling
 Switch out inline styling and custom components for Tailwind versions (NOTE: I *wanted to show knowledge of CSS + HTML, along with quick personal design decisions)
 
+Miscellaneous UX details
+  - Add colors to buttons to indicate different actions
+  - Add styling for disabled elements
+  - Change styling to be more responsive
+  - Add alternating colors to table rows for legibility
+
+
+### Accessibility
+Ensure UI follows accessible design principles
+  - Tab order and element focus for keyboard navigation
+  - Alt text and captions
+  - Placeholders and labels with accurate descriptions
+  - ARIA (when native element or attribute is insufficient)
+
+Test for x-browser compatibility
+
 
 ### Loading + Empty State components
 Change `Table` component to display skeleton in the table body when loading, and a row with "No matches found" message when search returns nothing
@@ -47,7 +63,7 @@ Change `Table` component to display skeleton in the table body when loading, and
 
 
 ### Additional UI features
-Add filtering in addition to search for common categories (e.g. degrees, specialties)
+Add filtering in addition to search for categories with limited set of options or lots of common options (e.g. degrees, specialties)
 
 
 
