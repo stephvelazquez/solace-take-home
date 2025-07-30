@@ -42,17 +42,17 @@ export const Pagination = ({ totalPages, onClick, currPage }: PaginationProps) =
 
   return (
     <div style={{display: 'flex', justifyContent: 'space-between', flexDirection: 'row', alignItems: 'center', marginTop: '12px'}} >
-      <button style={btnStyle} value="toFirst" disabled={pgOneBtnDisabled} onClick={onClick}>
+      <button style={btnStyle} name="toFirst" disabled={pgOneBtnDisabled} onClick={onClick}>
         {"<<"}
       </button>
-      <button style={btnStyle} value="previous" onClick={onClick} disabled={prevBtnDisabled}>
+      <button style={btnStyle} name="previous" onClick={onClick} disabled={prevBtnDisabled}>
         {"<"}
       </button>
       <p style={{fontSize: '14px', margin: '0px 5px 0px 5px'}}>{`Page ${currPage} of ${totalPages}`}</p>
-      <button style={btnStyle} value="next" onClick={onClick} disabled={nextBtnDisabled}>
+      <button style={btnStyle} name="next" onClick={onClick} disabled={nextBtnDisabled}>
         {">"}
       </button>
-      <button style={btnStyle} value="toLast" disabled={lastPgBtnDisabled} onClick={onClick}>
+      <button style={btnStyle} name="toLast" disabled={lastPgBtnDisabled} onClick={onClick}>
         {">>"}
       </button>
     </div>

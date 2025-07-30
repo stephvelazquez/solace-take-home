@@ -7,9 +7,13 @@ import { Advocate } from "@/app/types/advocate-types";
 import { ItemPerPgSelect } from "../shared/ItemPerPgSelect";
 import { Pagination } from "../shared/Pagination";
 
+type NumberValuesObject = { [key: string]: number }
+
+type AdvocatesArrayObject = {[key: string]: Advocate[] | undefined}
+
 const COLUMN_NAMES = ['First Name', 'Last Name', 'City', 'Degree', 'Specialties', 'Years of Experience', 'Phone Number']
 
-const OPTIONS = ["All", 5, 10, 20]
+const OPTIONS = ["All", 5, 10, 20] // Remove `All` option with large data sets
 
 export const Advocates = () => {
   const [advocates, setAdvocates] = useState<undefined | Advocate[]>(undefined);
@@ -18,8 +22,10 @@ export const Advocates = () => {
   const [searchStr, setSearchStr] = useState<string>("")
   const [currPage, setCurrPage] = useState(1);
   const [totalPages, setTotalPages] = useState(1);
-  const [itemsPerPg, setItemsPerPg] = useState("All");
+  const [itemsPerPg, setItemsPerPg] = useState<number | string>("All");
+  const [currPageData, setCurrPageData] = useState<undefined | Advocate[]>(undefined)
   const [numAdvocates, setNumAdvocates] = useState<number>(0) // TODO: Refactor API to send this information as part of response
+
 
   useEffect(() => {
     fetch("/api/advocates").then((response) => {
@@ -30,17 +36,32 @@ export const Advocates = () => {
     });
   }, []);
 
-  const onChange = (e: ChangeEvent<HTMLInputElement>) => {
+
+  useEffect(() => {
+    if (numAdvocates) {
+      if (itemsPerPg === "All") {
+        setTotalPages(1);
+      } else {
+        const newRange = Math.ceil(numAdvocates / Number(itemsPerPg));
+        setTotalPages(newRange);
+      }
+    }
+  }, [numAdvocates, itemsPerPg]);
+
+
+  const onInputChange = (e: ChangeEvent<HTMLInputElement>) => {
     const { value } = e.target
 
     setSearchStr(value)
   };
+
 
   const onResetClick = () => {
     setShowFilteredResults(false)
     setSearchStr("")
     setFilteredAdvocates(undefined)
   };
+
 
   const onSearchClick = () => {
     const lowerCaseStr = searchStr.toLowerCase()
@@ -63,9 +84,11 @@ export const Advocates = () => {
     setShowFilteredResults(true)
   }
 
+
   const onEnter = (e: KeyboardEvent<HTMLInputElement>) => {
     if(e.key === "Enter") onSearchClick()
   }
+  
   
   const onSelectChange = (e: ChangeEvent<HTMLSelectElement>) => {
     const { value } = e.target;
@@ -79,15 +102,42 @@ export const Advocates = () => {
     setCurrPage(1);
   };
 
-  const onPaginationClick = () => {
-    // Do something
+
+  const onPaginationClick = (e: MouseEvent<HTMLButtonElement>) => {
+    const { name } = e.currentTarget
+
+    const clickMap: NumberValuesObject = {
+      toFirst: 1,
+      previous: currPage - 1,
+      next: currPage + 1,
+      toLast: totalPages,
+    };
+
+    setCurrPage(clickMap[name]);
+
+    const itemssPerPgToNum = Number(itemsPerPg);
+
+    const currIdx = Number(itemsPerPg) * currPage;
+
+    const sliceMap: AdvocatesArrayObject = {
+      toFirst: advocates?.slice(0, itemssPerPgToNum), // TODO: refactor `filteredAdvoates` or add new state for pagination data
+      previous: advocates?.slice(
+        currIdx - itemssPerPgToNum * 2,
+        currIdx - itemssPerPgToNum,
+      ),
+      next: advocates?.slice(currIdx, currIdx + itemssPerPgToNum),
+      toLast: advocates?.slice(totalPages - itemssPerPgToNum),
+    };
+
+    setCurrPageData(sliceMap[name]);
   }
+
 
   return (
     <div>
       <h1 style={{ fontSize: '50px',  fontWeight: '600', marginBottom: '3rem'}}>Solace Advocates</h1>
       <div style={{ marginBottom: '2rem' }}>
-        <SearchInput onSearchClick={onSearchClick} onInputChange={onChange} onResetClick={onResetClick} inputLabel="Search for" value={searchStr} onEnter={onEnter} inputDisabled={advocates === undefined} resetDisabled={searchStr === "" && !showFilteredResults} searchBtnDisabled={searchStr === ""} />
+        <SearchInput onSearchClick={onSearchClick} onInputChange={onInputChange} onResetClick={onResetClick} inputLabel="Search for" value={searchStr} onEnter={onEnter} inputDisabled={advocates === undefined} resetDisabled={searchStr === "" && !showFilteredResults} searchBtnDisabled={searchStr === ""} />
       </div>
       <div>
         {advocates === undefined
