@@ -64,6 +64,10 @@ Change `Table` component to display skeleton in the table body when loading, and
 
 ### Additional UI features
 Add filtering in addition to search for categories with limited set of options or lots of common options (e.g. degrees, specialties)
+  - Add query params to API request to make search/filter more efficient, and to account for paginated data
+  - Add dropdowns (or similar selection components) to UI
+    -> PRE-API CHANGES: use similar to current search to filter available data
+    -> POST-API CHANGES: use filter values to populate query params when re-fetching data
 
 
 
