@@ -16,6 +16,13 @@ const COLUMN_NAMES = ['First Name', 'Last Name', 'City', 'Degree', 'Specialties'
 const OPTIONS = ["All", 5, 10, 20] // Remove `All` option with large data sets
 
 export const Advocates = () => {
+  {/*
+    TODO: Consider if certain pieces of state can be managed in `useEffect` if they are consistently dependent on other state changes
+      - `totalPages` depends on `numAdvocates`, which in turn depends on `filteredAdvocates` and `showFilteredResults`
+      - `dataToDisplay` depends on `filteredAdvocates` and `showFilteredResults`
+    This might be cleaner than setting them in event handlers, but will that affect legibility positively or negatively?
+    Do we run the risk of some state update accidentally being omitted if we put that logic in handlers?
+  */}
   const [advocates, setAdvocates] = useState<undefined | Advocate[]>(undefined);
   const [filteredAdvocates, setFilteredAdvocates] = useState<undefined | Advocate[]>(undefined);
   const [showFilteredResults, setShowFilteredResults] = useState<boolean>(false)
@@ -23,7 +30,7 @@ export const Advocates = () => {
   const [currPage, setCurrPage] = useState(1);
   const [totalPages, setTotalPages] = useState(1);
   const [itemsPerPg, setItemsPerPg] = useState<number | string>("All");
-  const [currPageData, setCurrPageData] = useState<undefined | Advocate[]>(undefined)
+  const [dataToDisplay, setDataToDisplay] = useState<undefined | Advocate[]>(undefined)
   const [numAdvocates, setNumAdvocates] = useState<number>(0) // TODO: Refactor API to send this information as part of response
 
 
@@ -36,7 +43,7 @@ export const Advocates = () => {
     });
   }, []);
 
-
+  // Change total page count when user changes # of items per page
   useEffect(() => {
     if (numAdvocates) {
       if (itemsPerPg === "All") {
@@ -60,6 +67,9 @@ export const Advocates = () => {
     setShowFilteredResults(false)
     setSearchStr("")
     setFilteredAdvocates(undefined)
+    // Data should be defined by this point so ssertion as number will likely throw no errors
+    // NOTE: undefined data can be handled when implementing `Suspense` w/ fallback
+    setNumAdvocates(advocates?.length as number) 
   };
 
 
@@ -89,7 +99,8 @@ export const Advocates = () => {
     if(e.key === "Enter") onSearchClick()
   }
   
-  
+  // TODO: Consider moving all this logic into its own component that depends on a data prop
+  // (maybe something like `Footer`). This is starting to clutter up the file.
   const onSelectChange = (e: ChangeEvent<HTMLSelectElement>) => {
     const { value } = e.target;
 
@@ -115,21 +126,22 @@ export const Advocates = () => {
 
     setCurrPage(clickMap[name]);
 
+    // This should cause no issues (with the `All` option) as pagination will only be enabled with numerical values
     const itemssPerPgToNum = Number(itemsPerPg);
 
-    const currIdx = Number(itemsPerPg) * currPage;
+    const currIdx = itemssPerPgToNum * currPage;
 
     const sliceMap: AdvocatesArrayObject = {
-      toFirst: advocates?.slice(0, itemssPerPgToNum), // TODO: refactor `filteredAdvoates` or add new state for pagination data
-      previous: advocates?.slice(
+      toFirst: dataToDisplay?.slice(0, itemssPerPgToNum), // TODO: refactor `filteredAdvoates` or add new state for pagination data
+      previous: dataToDisplay?.slice(
         currIdx - itemssPerPgToNum * 2,
         currIdx - itemssPerPgToNum,
       ),
-      next: advocates?.slice(currIdx, currIdx + itemssPerPgToNum),
-      toLast: advocates?.slice(totalPages - itemssPerPgToNum),
+      next: dataToDisplay?.slice(currIdx, currIdx + itemssPerPgToNum),
+      toLast: dataToDisplay?.slice(numAdvocates - itemssPerPgToNum),
     };
 
-    setCurrPageData(sliceMap[name]);
+    setDataToDisplay(sliceMap[name]);
   }
 
 
