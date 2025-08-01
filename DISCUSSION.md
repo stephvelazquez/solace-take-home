@@ -30,7 +30,8 @@ Paginated data fetching
 
 
 ### `Table` component
-Create a generic recursive data mapping of `<tr>` elements for broader types of arrays (not limited to arrays of advocates)
+Create a generic recursive data mapping of `<td>` elements for broader types of arrays (not limited to arrays of advocates)
+  - Update data fetch to include `id` from database to be used as unique key in jsx
 
 
 ### `Advocates` component search function
