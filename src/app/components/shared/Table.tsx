@@ -4,9 +4,11 @@ import { formatPhoneNumber } from "@/app/utils/formatting"
 interface TableProps {
   columnNames: string[]
   tableData: Advocate[]
+  isEmpty?: boolean
+  isLoading?: boolean
 }
 
-export const Table = ({columnNames, tableData}: TableProps) => (
+export const Table = ({columnNames, tableData, isEmpty = false, isLoading = false}: TableProps) => (
   <table>
         <thead style={{borderBottom: '2px solid'}}>
           {/* 
@@ -19,6 +21,12 @@ export const Table = ({columnNames, tableData}: TableProps) => (
           </tr>
         </thead>
         <tbody>
+          {isEmpty && (
+            <tr>No data to display</tr>
+      )}
+      {isLoading && (
+        <tr></tr>
+      )}
           {tableData.map((advocate, i) => (
             <tr key={`${i}-${advocate.lastName}`} style={{borderBottom: 'solid #d3d3d3'}}>
               <td>{advocate.firstName}</td>
